@@ -23,7 +23,10 @@
 .quotes-nav-button:active,
 .quotes-nav-button:focus,{% for i in (1..19) %}
 #rdb4quote{{ i }}:checked ~ main .quotes-nav-button:nth-child({{ i }}),{% endfor %}
-.jekyllPlaceholderClass	{ background-color: purple; }{% for i in (1..19) %}{% for j in (1..19) %}{% for k in (1..19) %}
+.jekyllPlaceholderClass	{ background-color: purple; }
+cite,
+.services-box-text-a,
+.d-purple,{% for i in (1..19) %}{% for j in (1..19) %}{% for k in (1..19) %}
 #rdb4DK{{ i }}{{ j }}{{ k }}:checked ~ .faq-DKtext,
 #rdb4DK{{ i }}{{ j }}{{ k }}:checked ~ .faq-DKtext a,{% endfor %}{% endfor %}{% endfor %}
 .jekyllPlaceholderClass { color: purple; }
