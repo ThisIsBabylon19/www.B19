@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-		<input type="checkbox" id="chbx4menu" name="chbx4menu" checked />
+		<input type="checkbox" id="chbx4menu" name="chbx4menu" />
 		{% for file in site.data.testimonials %}
 		<input type="radio" id="rdb4quote{{ forloop.index }}" name="rdb4quotes"{% if forloop.first %} checked{% endif %} />{% endfor %}
 		<main>
