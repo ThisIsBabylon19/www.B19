@@ -1,240 +1,124 @@
-console.clear();
-console.log('lsakdfalskjdflnksd');
+	var text1 = "two two seven seven seven seven seven seven seven three three three eight eight eight eight eight eight eight eight five five five five five four four four four nine nine nine nine nine nine nine nine nine one ten ten ten ten ten ten ten ten ten ten six six six six six six",
+	text2 = "{% for file in site.data.electedechoes.senator_angela-sobey %}{{ file.text | downcase }}{% endfor %}",
+	words = sortByFrequency( text2.split(/[ ,.]+/) )
+		.map(function(d,i) {
+			//console.log(d);
+        	return {text: d, size: -i};
+        });
 
-const config = {
-  src: '/assets/images/figures-of-purple.png',
-  rows: 15,
-  cols: 7 };
+var fontName = "Impact",
+	cWidth = document.documentElement.clientWidth,
+	cHeight = document.documentElement.clientHeight / 2,
+	svg,
+	wCloud,
+	bbox,
+	ctm,
+	bScale,
+	bWidth,
+	bHeight,
+	bMidX,
+	bMidY,
+	bDeltaX,
+	bDeltaY;
+
+window.onresize = getNewWindowSize;
+function getNewWindowSize(){
+  cWidth = document.documentElement.clientWidth;
+  cHeight = document.documentElement.clientHeight / 2;
+}
 
 
-// UTILS
+var cTemp = document.createElement('canvas'),
+	ctx = cTemp.getContext('2d');
+	ctx.font = "100px " + fontName;
 
-const randomRange = (min, max) => min + Math.random() * (max - min);
+var fRatio = Math.min(cWidth, cHeight) / ctx.measureText(words[0].text).width,
+	fontScale = d3.scale.linear()
+		.domain([
+			d3.min(words, function(d) { return d.size; }), 
+			d3.max(words, function(d) { return d.size; })
+		])
+		//.range([20,120]),
+		.range([20,100*fRatio/2]), // tbc
+	fill = d3.scale.category20();
 
-const randomIndex = array => randomRange(0, array.length) | 0;
+d3.layout.cloud()
+	.size([cWidth, cHeight])
+	.words(words)
+	//.padding(2) // controls
+	.rotate(function() { return ~~(Math.random() * 2) * 90; })
+	.font(fontName)
+	.fontSize(function(d) { return fontScale(d.size) })
+	.on("end", draw)
+	.start();
 
-const removeFromArray = (array, i) => array.splice(i, 1)[0];
-
-const removeItemFromArray = (array, item) => removeFromArray(array, array.indexOf(item));
-
-const removeRandomFromArray = array => removeFromArray(array, randomIndex(array));
-
-const getRandomFromArray = (array) =>
-array[randomIndex(array) | 0];
-
-
-// TWEEN FACTORIES
-
-const resetPeep = ({ stage, peep }) => {
-  const direction = Math.random() > 0.5 ? 1 : -1;
-  // using an ease function to skew random to lower values to help hide that peeps have no legs
-  const offsetY = 100 - 250 * gsap.parseEase('power2.in')(Math.random());
-  const startY = stage.height - peep.height + offsetY;
-  let startX;
-  let endX;
-
-  if (direction === 1) {
-    startX = -peep.width;
-    endX = stage.width;
-    peep.scaleX = 1;
-  } else {
-    startX = stage.width + peep.width;
-    endX = 0;
-    peep.scaleX = -1;
-  }
-
-  peep.x = startX;
-  peep.y = startY;
-  peep.anchorY = startY;
-
-  return {
-    startX,
-    startY,
-    endX };
-
+function draw(words, bounds) {
+	// move and scale cloud bounds to canvas
+	// bounds = [{x0, y0}, {x1, y1}]
+	bWidth = bounds[1].x - bounds[0].x;
+	bHeight = bounds[1].y - bounds[0].y;
+	bMidX = bounds[0].x + bWidth/2;
+	bMidY = bounds[0].y + bHeight/2;
+	bDeltaX = cWidth/2 - bounds[0].x + bWidth/2;
+	bDeltaY = cHeight/2 - bounds[0].y + bHeight/2;
+	bScale = bounds ? Math.min( cWidth / bWidth, cHeight / bHeight) : 1;
+	
+	console.log(
+		"bounds (" + bounds[0].x + 
+		", " + bounds[0].y + 
+		", " + bounds[1].x + 
+		", " + bounds[1].y + 
+		"), width " + bWidth +
+		", height " + bHeight +
+		", mid (" + bMidX +
+		", " + bMidY +
+		"), delta (" + bDeltaX +
+		", " + bDeltaY +
+		"), scale " + bScale
+	);
+	
+	// the library's bounds seem not to correspond to reality?
+	// try using .getBBox() instead?
+	
+	svg = d3.select(".cloud").append("svg")
+		.attr("width", cWidth)
+		.attr("height", cHeight);
+	
+	wCloud = svg.append("g")
+		//.attr("transform", "translate(" + [bDeltaX, bDeltaY] + ") scale(" + 1 + ")") // nah!
+		.attr("transform", "translate(" + [bWidth>>1, bHeight>>1] + ") scale(" + bScale + ")") // nah!
+		.selectAll("text")
+		.data(words)
+		.enter().append("text")
+		.style("font-size", function(d) { return d.size + "px"; })
+		.style("font-family", fontName)
+		.style("fill", function(d, i) { return fill(i); })
+		.attr("text-anchor", "middle")
+		.transition()
+		.duration(500)
+		.attr("transform", function(d) {
+			return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+		})
+		.text(function(d) { return d.text; });
+	
+	// TO DO: function to find min and max x,y of all words
+	// and use it as the group's bbox
+	// then do the transformation
+	bbox = wCloud.node(0).getBBox();
+	//ctm = wCloud.node().getCTM();
+	console.log(
+		"bbox (x: " + bbox.x + 
+		", y: " + bbox.y + 
+		", w: " + bbox.width + 
+		", h: " + bbox.height + 
+		")"
+	);
+	
 };
 
-const normalWalk = ({ peep, props }) => {
-  const {
-    startX,
-    startY,
-    endX } =
-  props;
-
-  const xDuration = 10;
-  const yDuration = 0.25;
-
-  const tl = gsap.timeline();
-  tl.timeScale(randomRange(0.5, 1.5));
-  tl.to(peep, {
-    duration: xDuration,
-    x: endX,
-    ease: 'none' },
-  0);
-  tl.to(peep, {
-    duration: yDuration,
-    repeat: xDuration / yDuration,
-    yoyo: true,
-    y: startY - 10 },
-  0);
-
-  return tl;
-};
-
-const walks = [
-normalWalk];
-
-
-// CLASSES
-
-class Peep {
-  constructor({
-    image,
-    rect })
-  {
-    this.image = image;
-    this.setRect(rect);
-
-    this.x = 0;
-    this.y = 0;
-    this.anchorY = 0;
-    this.scaleX = 1;
-    this.walk = null;
-  }
-
-  setRect(rect) {
-    this.rect = rect;
-    this.width = rect[2];
-    this.height = rect[3];
-
-    this.drawArgs = [
-    this.image,
-    ...rect,
-    0, 0, this.width, this.height];
-
-  }
-
-  render(ctx) {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.scale(this.scaleX, 1);
-    ctx.drawImage(...this.drawArgs);
-    ctx.restore();
-  }}
-
-
-// MAIN
-
-const img = document.createElement('img');
-img.onload = init;
-img.src = config.src;
-
-const canvas = document.querySelector('#canvas');
-const ctx = canvas.getContext('2d');
-
-const stage = {
-  width: 0,
-  height: 0 };
-
-
-const allPeeps = [];
-const availablePeeps = [];
-const crowd = [];
-
-function init() {
-  createPeeps();
-
-  // resize also (re)populates the stage
-  resize();
-
-  gsap.ticker.add(render);
-  window.addEventListener('resize', resize);
-}
-
-function createPeeps() {
-  const {
-    rows,
-    cols } =
-  config;
-  const {
-    naturalWidth: width,
-    naturalHeight: height } =
-  img;
-  const total = rows * cols;
-  const rectWidth = width / rows;
-  const rectHeight = height / cols;
-
-  for (let i = 0; i < total; i++) {if (window.CP.shouldStopExecution(0)) break;
-    allPeeps.push(new Peep({
-      image: img,
-      rect: [
-      i % rows * rectWidth,
-      (i / rows | 0) * rectHeight,
-      rectWidth,
-      rectHeight] }));
-
-
-  }window.CP.exitedLoop(0);
-}
-
-function resize() {
-  stage.width = canvas.clientWidth;
-  stage.height = canvas.clientHeight;
-  canvas.width = stage.width * devicePixelRatio;
-  canvas.height = stage.height * devicePixelRatio;
-
-  crowd.forEach(peep => {
-    peep.walk.kill();
-  });
-
-  crowd.length = 0;
-  availablePeeps.length = 0;
-  availablePeeps.push(...allPeeps);
-
-  initCrowd();
-}
-
-function initCrowd() {
-  while (availablePeeps.length) {if (window.CP.shouldStopExecution(1)) break;
-    // setting random tween progress spreads the peeps out
-    addPeepToCrowd().walk.progress(Math.random());
-  }window.CP.exitedLoop(1);
-}
-
-function addPeepToCrowd() {
-  const peep = removeRandomFromArray(availablePeeps);
-  const walk = getRandomFromArray(walks)({
-    peep,
-    props: resetPeep({
-      peep,
-      stage }) }).
-
-  eventCallback('onComplete', () => {
-    removePeepFromCrowd(peep);
-    addPeepToCrowd();
-  });
-
-  peep.walk = walk;
-
-  crowd.push(peep);
-  crowd.sort((a, b) => a.anchorY - b.anchorY);
-
-  return peep;
-}
-
-function removePeepFromCrowd(peep) {
-  removeItemFromArray(crowd, peep);
-  availablePeeps.push(peep);
-}
-
-function render() {
-  canvas.width = canvas.width;
-  ctx.save();
-  ctx.scale(devicePixelRatio, devicePixelRatio);
-
-  crowd.forEach(peep => {
-    peep.render(ctx);
-  });
-
-  ctx.restore();
+function sortByFrequency(arr) {
+	var f = {};
+	arr.forEach(function(i) { f[i] = 0; });
+	var u = arr.filter(function(i) { return ++f[i] == 1; });
+	return u.sort(function(a, b) { return f[b] - f[a]; });
 }

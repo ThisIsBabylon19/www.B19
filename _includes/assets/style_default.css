@@ -1,0 +1,190 @@
+/*** CANCEL ***/
+html, body { width: 100%; height: 100%; }
+main { width: 100%; min-height: 100%; }
+/*** END CANCEL ***/
+
+/*** Z-INDEXES ***/
+.u-trees-img { position: relative; z-index: 10; }
+.u-trees-text { position: relative; z-index: 20; }
+/*** END Z-INDEXES ***/
+
+/*** COLORS ***/
+.u-button { background-color: #eee; }
+
+.u-button,
+.u-button * { color: black !important; }
+/*** END COLORS ***/
+
+/*** FONTS ***/
+@font-face{font-family:"Bauhaus";src:url("/assets/fonts/BAUHS93.TTF");}
+@font-face{font-family:"Impact";src:url("/assets/fonts/impact.TTF");}
+
+* { font-family: "Impact"; word-spacing: .15em; }
+.u-trees-text-title { font-family: "Bauhaus"; line-height: 1.15em; word-spacing: initial !important; }
+
+.u-audio,
+.u-trees-text { text-align: center; }
+.u-button,
+.u-link { text-decoration: underline; }
+/*** END FONTS ***/
+
+/*** MEDIA ***/
+.u-audiogram-bar { background-image: url("/assets/images/electedechoes/senator-angela-sobey.png"); }
+.u-audiogram-bar {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-attachment: fixed;
+	background-color: black;
+	
+	filter: grayscale(100%);
+}
+/*** END MEDIA ***/
+
+/*** UTILITIES ***/
+	/*** .u-audio ***/
+	.u-audio-tag {
+		width: 100%;
+		padding: .5em;
+	}
+	
+	/*** .u-audiogram ***/
+	.u-audiogram {
+		width: 90%; height: 70vh;
+		display: block;
+		margin: 0 auto;
+//		border: 1px solid green;
+	}
+	.u-audiogram-dock {
+		width: auto; height: 100%;
+//		border: 1px solid purple;
+	}
+	.u-audiogram-bar {
+		width: 5%; height: 100%;
+		display: inline-block;
+		border-radius: 7em;
+	}
+		.u-audiogram-bar:nth-child(1) { height: 5%; }
+		.u-audiogram-bar:nth-child(2) { height: 10%; }
+		.u-audiogram-bar:nth-child(3) { height: 30%; }
+		.u-audiogram-bar:nth-child(4) { height: 19%; }
+		.u-audiogram-bar:nth-child(5) { height: 55%; }
+		.u-audiogram-bar:nth-child(6) { height: 75%; }
+		.u-audiogram-bar:nth-child(7) { height: 100%; }
+		.u-audiogram-bar:nth-child(8) { height: 79%; }
+		.u-audiogram-bar:nth-child(9) { height: 85%; }
+		.u-audiogram-bar:nth-child(10) { height: 75%; }
+		.u-audiogram-bar:nth-child(11) { height: 55	%; }
+		.u-audiogram-bar:nth-child(12) { height: 90%; }
+		.u-audiogram-bar:nth-child(13) { height: 70%; }
+		.u-audiogram-bar:nth-child(14) { height: 80%; }
+		.u-audiogram-bar:nth-child(15) { height: 65%; }
+		.u-audiogram-bar:nth-child(16) { height: 30%; }
+		.u-audiogram-bar:nth-child(17) { height: 45%; }
+		.u-audiogram-bar:nth-child(18) { height: 15%; }
+		.u-audiogram-bar:nth-child(19) { height: 10%; }
+	
+	/*** .u-button ***/
+	.u-button {
+		padding: .5em 1em;
+		border-radius: 3em;
+	}
+	
+	/*** .u-link ***/
+	
+	/*** .u-maps ***/
+	.u-maps-list { display: flex; }
+	.u-maps-list-item { flex: 1; }
+	
+	.u-maps {
+		width: 100%;
+		padding: 1em;
+	}
+
+	/*** .u-screen ***/
+	.u-screen { display: flex; }
+	
+	.u-screen {
+		width: 100%; height: 100%;
+	}
+	
+	/*** .u-trees-text ***/
+	.u-trees-text {
+		position: absolute;
+	}
+/*** END UTILITIES ***/
+
+/*** INTERACTIVITY ***/
+.u-button,
+.u-link { cursor: pointer; }
+/*** END INTERACTIVITY ***/
+
+/*** MEDIA-QUERIES ***/
+@media all and (max-width: 50em) {
+	/*** FONTS ***/
+    body, html, main { font-size: 16px; }
+	.u-trees-text-title { font-size: 2.5em; }
+	
+	/*** COMPONENTS: COMMONS ***/
+	.u-maps-img,
+	.u-trees-text-logo-img { height: 1.9em; width: auto; }
+	
+	/*** UTILITIES: .u-audio ***/
+	.u-audio.is-cssHack { width: 50%; }
+	
+	/*** UTILITIES: .u-audiogram ***/
+	.u-audiogram-bar { margin: .125em; }
+	
+	/*** UTILITIES: .u-trees ***/
+	.u-trees-text { margin-bottom: 7em; }
+}
+@media all and (min-width: 50em) {
+	/*** FONTS ***/
+    body, html, main { font-size: 18px; }
+	.u-trees-text-title { font-size: 5em; }
+	
+	/*** COMPONENTS: COMMONS ***/
+	.u-maps-img,
+	.u-trees-text-logo-img { height: 3em; width: auto; }
+	
+	/*** UTILITIES: .u-audio ***/
+	.u-audio.is-cssHack { width: 25%; }
+	
+	/*** UTILITIES: .u-audiogram ***/
+	.u-audiogram-bar { margin: .25em; }
+
+	/*** UTILITIES: .u-trees ***/
+	.u-trees-text { margin-bottom: 25em; }
+}
+/*** END MEDIA-QUERIES ***/
+
+/*** DECORATION ***/
+	/*** .d-cssCentered ***/
+	.d-cssCentered {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.u-screen.d-cssCentered,
+	.u-trees.d-cssCentered { flex-direction: column; }
+	
+	/*** .d-textBG ***/
+	.d-textBG {
+		
+	}
+	.d-textBG-word {
+		vertical-align: top;
+		
+		border: 1px solid purple;
+	}
+/*** END DECORATION ***/
+
+/*** ANIMATION ***/
+.d-animate_audio,
+.d-animate_button { animation: heartBeat .5s infinite alternate; }
+
+@keyframes heartBeat { from { transform: scale(1); } to { transform: scale(1.1); } }
+/*** END ANIMATION ***/
+
+/*** CSS-HACKS ***/
+/*** END CSS-HACKS ***/
