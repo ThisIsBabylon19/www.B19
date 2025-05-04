@@ -273,6 +273,10 @@ html, body, main {// background-color: #rgb(250, 253, 241); }
 	}
 	
 	/*** .faq ***/
+	.faq-content {
+		display: flex; 
+		flex-direction: column-reverse;
+	}
 	.faq-content-list-item { padding-left: 1.9em; }
 	
 	/*** .header ***/
