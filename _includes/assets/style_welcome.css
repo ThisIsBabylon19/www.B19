@@ -24,7 +24,8 @@
 .quotes-nav-button:focus,{% for i in (1..19) %}
 #rdb4quote{{ i }}:checked ~ main .quotes-nav-button:nth-child({{ i }}),{% endfor %}
 .jekyllPlaceholderClass	{ background-color: purple; }
-cite,
+.poems cite,
+.quotes cite,
 .services-box-text-a,
 .d-purple,{% for i in (1..19) %}{% for j in (1..19) %}{% for k in (1..19) %}
 #rdb4DK{{ i }}{{ j }}{{ k }}:checked ~ .faq-DKtext,
@@ -258,6 +259,7 @@ html, body, main {// background-color: #rgb(250, 253, 241); }
 	.header,
 	.u-section { padding: 1em; }
 	.u-section-subtitle { padding: 1em 0; }
+	.services-list-item { padding-right: 1em; }
 	.header-button-img,
 	.header-logo-img { height: 2em; height: 1.25em; }
 		.menu { padding-right: {{ 2 | plus: 1 }}em !important; }
@@ -351,7 +353,8 @@ html, body, main {// background-color: #rgb(250, 253, 241); }
 	.u-section { padding: 1.9em; }
 	.faq-content,
 	.u-section-subtitle { padding: 1.9em 0; }
-	.partners-header-figure { padding-right: 1.9em; }
+	.partners-header-figure,
+	.services-list-item { padding-right: 1.9em; }
 	.menu-tagline { margin: 1.9em; }
 	.header-button-img,
 	.header-logo-img,
@@ -425,9 +428,6 @@ html, body, main {// background-color: #rgb(250, 253, 241); }
 	
 	.services-list {
 		padding: .1em 0;
-	}
-	.services-list-item {
-		padding-right: 1em;
 	}
 	
 	/*** .quotes ***/
